@@ -5,9 +5,10 @@ AS = nasm
 
 all:	boot.flp
 
-boot.flp:	boot
+boot.flp:	boot program
 	dd if=/dev/zero of=boot.flp bs=512 count=2880
 	dd if=boot of=boot.flp bs=512 conv=notrunc
+	dd if=boot of=boot.flp bs=512 conv=notrunc seek=1
 
 clean:
 	rm -f boot boot.flp
