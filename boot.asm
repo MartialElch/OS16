@@ -1,31 +1,23 @@
+[ORG 0x7c00]
 BITS 16
 
 start:
     ; Set up the stack pointer
     mov sp, 0x7c00
+    mov ax, 0
+    mov ds, ax
 
-    ; Print the message to the console
-    mov ah, 0x0e    ; BIOS function for printing a character
-    mov al, 'H'     ; Character to print
-    int 0x10        ; Call the BIOS to print the character
-    mov al, 'e'     ; Character to print
-    int 0x10
-    mov al, 'l'     ; Character to print
-    int 0x10
-    int 0x10
-    mov al, 'o'     ; Character to print
-    int 0x10
-    int 0x10
-    mov al, 'W'     ; Character to print
-    int 0x10
-    mov al, 'o'     ; Character to print
-    int 0x10
-    mov al, 'r'     ; Character to print
-    int 0x10
-    mov al, 'l'     ; Character to print
-    int 0x10
-    mov al, 'd'     ; Character to print
-    int 0x10
+    ; print welcome message
+    mov si, msg     ; load pointer to msg
+
+ch_loop:
+    lodsb           ; load char from string into al
+    or al, al       ; zero means end of string
+    jz done         ; go to end of loop om zero
+    mov ah, 0x0E    ; color in hi byte of word
+    int 0x10        ; use bios for print
+    jmp ch_loop     ; go to next char
+done:
 
     ; Load the program from floppy
     mov ax, 0x0201   ; Read one sector from floppy
@@ -41,11 +33,14 @@ start:
     ; Jump to the program's entry point
     jmp 0x0000:0x8000
 
+halt:
     ; Infinite loop
     cli             ; disable interrupts
     hlt             ; stop processor
     jmp $
-    
+
+msg db 'Hello World!', 13, 10, 0
+
     times 510-($-$$) db 0
 	db 0x55         ;write boot sector signature at
 	db 0xAA         ;and of sector

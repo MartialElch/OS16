@@ -2,4 +2,5 @@
 
 boot
 program
+*.lst
 boot.flp

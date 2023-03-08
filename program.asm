@@ -1,25 +1,27 @@
-	; Print the message to the console
-    mov ah, 0x0e    ; BIOS function for printing a character
-    mov al, 'H'     ; Character to print
-    int 0x10        ; Call the BIOS to print the character
-    mov al, 'e'     ; Character to print
-    int 0x10
-    mov al, 'l'     ; Character to print
-    int 0x10
-    int 0x10
-    mov al, 'o'     ; Character to print
-    int 0x10
-    mov al, 'P'     ; Character to print
-    int 0x10
-    mov al, 'r'     ; Character to print
-    int 0x10
-    mov al, 'o'     ; Character to print
-    int 0x10
-    mov al, 'g'     ; Character to print
-    int 0x10
-    mov al, 'r'     ; Character to print
-    int 0x10
-    mov al, 'a'     ; Character to print
-    int 0x10
-    mov al, 'm'     ; Character to print
-    int 0x10
+[ORG 0x8000]
+BITS 16
+
+start:
+    ; Set up the stack pointer
+    mov ax, 0x0002
+    mov ds, ax
+
+    ; print welcome message
+    mov si, msg     ; load pointer to msg
+
+ch_loop:
+    lodsb           ; load char from string into al
+    or al, al       ; zero means end of string
+    jz done         ; go to end of loop om zero
+    mov ah, 0x0E    ; color in hi byte of word
+    int 0x10        ; use bios for print
+    jmp ch_loop     ; go to next char
+done:
+
+halt:
+    ; Infinite loop
+    cli             ; disable interrupts
+    hlt             ; stop processor
+    jmp $
+
+msg db 'Start Program', 13, 10, 0

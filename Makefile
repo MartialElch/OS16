@@ -11,7 +11,7 @@ boot.flp:	boot program
 	dd if=program of=boot.flp bs=512 conv=notrunc seek=1
 
 clean:
-	rm -f boot boot.flp
+	rm -f boot program *.lst boot.flp
 
 .asm:
-	$(AS) $<
+	$(AS) -l $@.lst $<
