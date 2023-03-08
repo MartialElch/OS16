@@ -15,7 +15,6 @@ start:
     int 0x10
     mov al, 'o'     ; Character to print
     int 0x10
-    int 0x10
     mov al, 'W'     ; Character to print
     int 0x10
     mov al, 'o'     ; Character to print
